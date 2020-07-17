@@ -109,7 +109,6 @@ namespace DrivesZPG
 
             return sex;
         }
-
         public string GetGenotype(string WhichGene)
         {
             string output = "error";
@@ -148,7 +147,6 @@ namespace DrivesZPG
             else
                 return output;
         }
-
         public int GetConservation(string WhichGene)
         {
             int output = 0;
@@ -199,7 +197,6 @@ namespace DrivesZPG
 
             return output;
         }
-
         public float GetFertility()
         {
             int fer = 100;
@@ -212,7 +209,7 @@ namespace DrivesZPG
             if (this.GetSex() == "male")
             {
                 if (this.AlleleHomozygous("ZPG", "Drive"))
-                { fer = 5; }
+                { fer -= 59; }
                 else if (this.AlleleHeterozygous("ZPG","Drive","ZPG","R2"))
                 { fer = 0; }
                 else if (this.AlleleHomozygous("ZPG", "R2"))
@@ -234,6 +231,15 @@ namespace DrivesZPG
                     
                 }
             }
+
+            if (this.AlleleHomozygous("Aper1", "R2"))
+            { fer -= 25; }
+
+            if (this.AlleleHomozygous("AP2", "R2"))
+            { fer -= 25; }
+
+            if (this.AlleleHomozygous("CP", "R2"))
+            { fer -= 25; }
 
 
             if (fer < 0)
@@ -540,5 +546,4 @@ namespace DrivesZPG
         }
         #endregion
     }
-
 }

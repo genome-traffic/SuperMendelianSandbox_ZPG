@@ -213,19 +213,19 @@ namespace DrivesZPG
             ZPGb.Traits.Add("Conservation", 95);
 
             GeneLocus Aper1a = new GeneLocus("Aper1", 2, "WT");
-            Aper1a.Traits.Add("Conservation", 0);
+            Aper1a.Traits.Add("Conservation", 95);
             GeneLocus Aper1b = new GeneLocus("Aper1", 2, "WT");
-            Aper1b.Traits.Add("Conservation", 0);
+            Aper1b.Traits.Add("Conservation", 95);
 
             GeneLocus AP2a = new GeneLocus("AP2", 3, "WT");
-            AP2a.Traits.Add("Conservation", 0);
+            AP2a.Traits.Add("Conservation", 95);
             GeneLocus AP2b = new GeneLocus("AP2", 3, "WT");
-            AP2b.Traits.Add("Conservation", 0);
+            AP2b.Traits.Add("Conservation", 95);
 
             GeneLocus CPa = new GeneLocus("CP", 1, "WT");
-            CPa.Traits.Add("Conservation", 0);
+            CPa.Traits.Add("Conservation", 95);
             GeneLocus CPb = new GeneLocus("CP", 1, "WT");
-            CPb.Traits.Add("Conservation", 0);
+            CPb.Traits.Add("Conservation", 95);
 
             Chromosome ChromXa = new Chromosome("X", "Sex");
             Chromosome ChromXb = new Chromosome("X", "Sex");
@@ -287,7 +287,7 @@ namespace DrivesZPG
 
             GeneLocus Aper1_d = new GeneLocus("Aper1", 2, "Drive");
             Aper1_d.Traits.Add("Cas9level", 0);
-            Aper1_d.Traits.Add("Hom_Repair", 99);
+            Aper1_d.Traits.Add("Hom_Repair", 95);
 
             Organism.ModifyAllele(ref ZPG_Aper1_Male.ChromosomeListA, Aper1_d, "WT");
 
@@ -304,7 +304,7 @@ namespace DrivesZPG
 
             GeneLocus CP_d = new GeneLocus("CP", 2, "Drive");
             CP_d.Traits.Add("Cas9level", 0);
-            CP_d.Traits.Add("Hom_Repair", 99);
+            CP_d.Traits.Add("Hom_Repair", 95);
 
             Organism.ModifyAllele(ref ZPG_CP_Male.ChromosomeListA, CP_d, "WT");
 
@@ -317,7 +317,7 @@ namespace DrivesZPG
 
             GeneLocus AP2_d = new GeneLocus("AP2", 2, "Drive");
             AP2_d.Traits.Add("Cas9level", 0);
-            AP2_d.Traits.Add("Hom_Repair", 99);
+            AP2_d.Traits.Add("Hom_Repair", 95);
 
             Organism.ModifyAllele(ref ZPG_AP2_Male.ChromosomeListA, AP2_d, "WT");
 
