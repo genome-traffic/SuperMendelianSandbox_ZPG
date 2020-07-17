@@ -17,11 +17,13 @@ namespace DrivesZPG
       
         /*-------------------- Simulation Parameters ---------------------------------*/
 
-        public int Generations = 10;
-        public int Iterations = 4;
+        public int Generations = 11;
+        public int Iterations = 25;
 
         public int PopulationCap = 600;
-        public int GlobalEggsPerFemale = 100;
+        public float Mortality = 0.1f;
+        public int GlobalEggsPerFemale = 80;
+        public int Sample = 47;
 
         public bool ApplyIntervention = false;
         public int StartingNumberOfWTFemales = 200;
@@ -30,7 +32,7 @@ namespace DrivesZPG
         public int EndIntervention = 2;
         public int InterventionReleaseNumber = 100;
 
-        string[] Track = { "ZPG", "Aper1", "CP","AP2" };
+        string[] Track = {"ZPG","Aper1","CP","AP2"};
         //string[] Track = { "ZPG" };
 
         /*------------------------------- The Simulation ---------------------------------------------*/
@@ -58,7 +60,8 @@ namespace DrivesZPG
                     else
                         Populate_with_Setup();
 
-                    
+                    Shuffle.ShuffleList(Adults);
+
                     for (int cGenerations = 1; cGenerations <= Generations; cGenerations++)
                     {
                         if (ApplyIntervention)
@@ -69,55 +72,65 @@ namespace DrivesZPG
                             }
                         }
                         #region output data to file
+
+                        //------------------------ Genotypes -------
+
                         List<string> Genotypes = new List<string>();
 
-                        int numberofallmales = 0;
-                        int numberofallfemales = 0;
-
-                        foreach (Organism O in Adults)
-                        {
-                            if (O.GetSex() == "female")
-                                numberofallfemales++;
-                            else
-                                numberofallmales++;
-
-                            foreach (string s in Track)
-                            {
+                         foreach (Organism O in Adults)
+                         {
+                             foreach (string s in Track)
+                             {
                                 Genotypes.Add(s + "," + O.GetGenotype(s));
-                            }
-                        }
-
-                        //Console.WriteLine("{0},{1},{2},{3},{4},{5}", cIterations, cGenerations, "Sex","Males","NA",numberofallmales);
-                        //Console.WriteLine("{0},{1},{2},{3},{4},{5}", cIterations, cGenerations, "Sex","Females","NA", numberofallfemales);
-                        Fwriter.WriteLine("{0},{1},{2},{3},{4},{5}", cIterations, cGenerations, "Sex", "Males", "NA", numberofallmales);
-                        Fwriter.WriteLine("{0},{1},{2},{3},{4},{5}", cIterations, cGenerations, "Sex", "Females", "NA", numberofallfemales);
-
+                             }
+                         }
 
                         var queryG = Genotypes.GroupBy(s => s)
                            .Select(g => new { Name = g.Key, Count = g.Count() });
 
                         foreach (var result in queryG)
                         {
-                            //Console.WriteLine("{0},{1},{2},{3}", cIterations, cGenerations,result.Name, result.Count);
-                            Fwriter.WriteLine("{0},{1},{2},{3}", cIterations, cGenerations, result.Name, result.Count);
+                          Fwriter.WriteLine("{0},{1},{2},{3},all", cIterations, cGenerations, result.Name, result.Count);
                         }
 
+                        Genotypes.Clear();
 
-                        //var queryall = Adults.SelectMany(x => x.ChromosomeListA.Concat(x.ChromosomeListB))
-                        //            .SelectMany(y => y.GeneLocusList)
-                        //            .GroupBy(z => new { z.GeneName, z.AlleleName })
-                        //            .Select(g => new { Name = g.Key, Count = g.Count() });
+                        int cSample = Sample;
+                        foreach (Organism O in Adults)
+                        {
+                            if (cSample > 0)
+                            {
+                                foreach (string s in Track)
+                                {
+                                    Genotypes.Add(s + "," + O.GetGenotype(s));
+                                }
+                                cSample--;
+                            }
+                        }
 
-                        //foreach (var result in queryall)
-                        //{
-                        //    //Console.WriteLine("ALLELES: {0},{1},{2},{3}", cIterations, cGenerations,result.Name, result.Count);
-                        //    //Fwriter.WriteLine("ALLELES: {0},{1},{2},{3}", cIterations, cGenerations, result.Name, result.Count);
-                        //}
+                        var queryGs = Genotypes.GroupBy(s => s)
+                           .Select(g => new { Name = g.Key, Count = g.Count() });
+
+                        foreach (var result in queryGs)
+                        {
+                            Fwriter.WriteLine("{0},{1},{2},{3},sample", cIterations, cGenerations, result.Name, result.Count);
+                        }
+
+                        //------------------------- Sex -----------
+                        int numberofallmales = 0;
+                        int numberofallfemales = 0;
+                        foreach (Organism O in Adults)
+                        {
+                            if (O.GetSex() == "female")
+                                numberofallfemales++;
+                            else
+                                numberofallmales++;
+                        }
+                        Fwriter.WriteLine("{0},{1},{2},{3},{4},{5},{6}", cIterations, cGenerations, "Sex", "Males", "NA", numberofallmales, "all");
+                        Fwriter.WriteLine("{0},{1},{2},{3},{4},{5},{6}", cIterations, cGenerations, "Sex", "Females", "NA", numberofallfemales, "all");
+
                         #endregion
 
-                        if (numberofallfemales == 0)
-                        break;
-                        
                         Shuffle.ShuffleList(Adults);
                         CrossAll();
                         Adults.Clear();
@@ -149,7 +162,6 @@ namespace DrivesZPG
         }
 
         //---------------------- Define Organisms, Genotypes and Starting Populations -----------------------------------------------------
-
 
         public void Populate_with_WT()
         {
@@ -189,7 +201,6 @@ namespace DrivesZPG
             {
                 Adults.Add(new Organism(GenerateZPG_DriveMale()));
             }
-
         }
 
         public Organism GenerateWTFemale()
@@ -202,19 +213,19 @@ namespace DrivesZPG
             ZPGb.Traits.Add("Conservation", 95);
 
             GeneLocus Aper1a = new GeneLocus("Aper1", 2, "WT");
-            Aper1a.Traits.Add("Conservation", 90);
+            Aper1a.Traits.Add("Conservation", 0);
             GeneLocus Aper1b = new GeneLocus("Aper1", 2, "WT");
-            Aper1b.Traits.Add("Conservation", 90);
+            Aper1b.Traits.Add("Conservation", 0);
 
             GeneLocus AP2a = new GeneLocus("AP2", 3, "WT");
-            AP2a.Traits.Add("Conservation", 90);
+            AP2a.Traits.Add("Conservation", 0);
             GeneLocus AP2b = new GeneLocus("AP2", 3, "WT");
-            AP2b.Traits.Add("Conservation", 90);
+            AP2b.Traits.Add("Conservation", 0);
 
             GeneLocus CPa = new GeneLocus("CP", 1, "WT");
-            CPa.Traits.Add("Conservation", 90);
+            CPa.Traits.Add("Conservation", 0);
             GeneLocus CPb = new GeneLocus("CP", 1, "WT");
-            CPb.Traits.Add("Conservation", 90);
+            CPb.Traits.Add("Conservation", 0);
 
             Chromosome ChromXa = new Chromosome("X", "Sex");
             Chromosome ChromXb = new Chromosome("X", "Sex");
@@ -262,9 +273,10 @@ namespace DrivesZPG
 
             GeneLocus ZPG_d = new GeneLocus("ZPG", 1, "Drive");
             ZPG_d.Traits.Add("Cas9level", 99);
-            ZPG_d.Traits.Add("Hom_Repair", 99);
+            ZPG_d.Traits.Add("Hom_Repair", 95);
 
             Organism.ModifyAllele(ref ZPG_Male.ChromosomeListA, ZPG_d, "WT");
+            //Organism.ModifyAllele(ref ZPG_Male.ChromosomeListA, ZPG_d, "R1");
 
             return ZPG_Male;           
         }
@@ -305,7 +317,7 @@ namespace DrivesZPG
 
             GeneLocus AP2_d = new GeneLocus("AP2", 2, "Drive");
             AP2_d.Traits.Add("Cas9level", 0);
-            AP2_d.Traits.Add("Hom_Repair", 95);
+            AP2_d.Traits.Add("Hom_Repair", 99);
 
             Organism.ModifyAllele(ref ZPG_AP2_Male.ChromosomeListA, AP2_d, "WT");
 
@@ -329,6 +341,9 @@ namespace DrivesZPG
         }
         public void CrossAll()
         {
+
+            int EffectivePopulation = (int)((1 - Mortality) * PopulationCap);
+  
             int numb;
             foreach (Organism F1 in Adults)
             {
@@ -338,7 +353,7 @@ namespace DrivesZPG
                 }
                 else
                 {
-                    for (int a = 0; a < PopulationCap; a++)
+                    for (int a = 0; a < EffectivePopulation; a++)
                     {
                         numb = random.Next(0, Adults.Count);
                         if (Adults[numb].GetSex() == "male")

@@ -1,0 +1,12 @@
+/Users/nikolai/Sync-Computing/GeneDrives/DrivesZPG/DrivesZPG/obj/Debug/netcoreapp3.1/DrivesZPG.csprojAssemblyReference.cache
+/Users/nikolai/Sync-Computing/GeneDrives/DrivesZPG/DrivesZPG/obj/Debug/netcoreapp3.1/DrivesZPG.AssemblyInfoInputs.cache
+/Users/nikolai/Sync-Computing/GeneDrives/DrivesZPG/DrivesZPG/obj/Debug/netcoreapp3.1/DrivesZPG.AssemblyInfo.cs
+/Users/nikolai/Sync-Computing/GeneDrives/DrivesZPG/DrivesZPG/obj/Debug/netcoreapp3.1/DrivesZPG.csproj.CoreCompileInputs.cache
+/Users/nikolai/Sync-Computing/GeneDrives/DrivesZPG/DrivesZPG/bin/Debug/netcoreapp3.1/DrivesZPG.deps.json
+/Users/nikolai/Sync-Computing/GeneDrives/DrivesZPG/DrivesZPG/bin/Debug/netcoreapp3.1/DrivesZPG.runtimeconfig.json
+/Users/nikolai/Sync-Computing/GeneDrives/DrivesZPG/DrivesZPG/bin/Debug/netcoreapp3.1/DrivesZPG.runtimeconfig.dev.json
+/Users/nikolai/Sync-Computing/GeneDrives/DrivesZPG/DrivesZPG/bin/Debug/netcoreapp3.1/DrivesZPG.dll
+/Users/nikolai/Sync-Computing/GeneDrives/DrivesZPG/DrivesZPG/bin/Debug/netcoreapp3.1/DrivesZPG.pdb
+/Users/nikolai/Sync-Computing/GeneDrives/DrivesZPG/DrivesZPG/obj/Debug/netcoreapp3.1/DrivesZPG.dll
+/Users/nikolai/Sync-Computing/GeneDrives/DrivesZPG/DrivesZPG/obj/Debug/netcoreapp3.1/DrivesZPG.pdb
+/Users/nikolai/Sync-Computing/GeneDrives/DrivesZPG/DrivesZPG/obj/Debug/netcoreapp3.1/DrivesZPG.genruntimeconfig.cache

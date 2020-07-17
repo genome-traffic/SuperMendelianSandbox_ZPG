@@ -149,23 +149,75 @@ namespace DrivesZPG
                 return output;
         }
 
+        public int GetConservation(string WhichGene)
+        {
+            int output = 0;
+
+            foreach (Chromosome Chrom in this.ChromosomeListA)
+            {
+                foreach (GeneLocus GL in Chrom.GeneLocusList)
+                {
+                    if (GL.GeneName == WhichGene)
+                    {
+                        if (GL.AlleleName == "WT")
+                        {
+                            foreach (var Trait in GL.Traits)
+                            {
+                                if (Trait.Key == "Conservation")
+                                {
+                                    output = Trait.Value;
+                                    return output;
+                                }
+                            }
+                        }
+
+                    }
+
+                }
+            }
+
+            foreach (Chromosome Chrom in this.ChromosomeListB)
+            {
+                foreach (GeneLocus GL in Chrom.GeneLocusList)
+                {
+                    if (GL.GeneName == WhichGene)
+                    {
+                        if (GL.AlleleName == "WT")
+                        {
+                            foreach (var Trait in GL.Traits)
+                            {
+                                if (Trait.Key == "Conservation")
+                                {
+                                    output = Trait.Value;
+                                    return output;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            return output;
+        }
+
         public float GetFertility()
         {
-            float fer = 1;
+            int fer = 100;
 
             //The effect of ZPG allele combinations
 
-            if (this.AllelePresent("ZPG", "Drive"))
-            { fer = 0.95f; }
+            //if (this.AllelePresent("ZPG", "Drive"))
+            //{ fer = 100; }
 
             if (this.GetSex() == "male")
             {
                 if (this.AlleleHomozygous("ZPG", "Drive"))
-                { fer = 0; }
+                { fer = 5; }
                 else if (this.AlleleHeterozygous("ZPG","Drive","ZPG","R2"))
                 { fer = 0; }
                 else if (this.AlleleHomozygous("ZPG", "R2"))
                 { fer = 0; }
+
             }
             else
             {
@@ -176,12 +228,22 @@ namespace DrivesZPG
                 else if (this.AlleleHomozygous("ZPG", "R2"))
                 { fer = 0; }
                 else if (this.AlleleHeterozygous("ZPG", "Drive", "ZPG", "WT"))
-                { fer = 0; }     
+                {
+                    fer = Simulation.random.Next(0,(100 - this.Cas9GermlineLevel()));
+                    fer -= 10;
+                    
+                }
             }
 
-            // OVERIDE
-            //fer = 1;
-            return fer;
+
+            if (fer < 0)
+            { fer = 0; }
+            else if (fer > 100)
+            { fer = 100; }
+
+           
+            float ffer = (float) fer / 100;
+            return ffer;
         }
 
         public bool AllelePresent(string WhichGene, string WhichAllele)
@@ -250,6 +312,7 @@ namespace DrivesZPG
         public bool AlleleHomozygous(string WhichGene, string WhichAllele)
         {
             bool oneisthere = false;
+
             foreach (Chromosome Chrom in this.ChromosomeListA)
             {
                 foreach (GeneLocus GL in Chrom.GeneLocusList)
@@ -281,6 +344,7 @@ namespace DrivesZPG
         public bool AlleleHomozygous(GeneLocus WhichLocus)
         {
             bool oneisthere = false;
+
             foreach (Chromosome Chrom in this.ChromosomeListA)
             {
                 foreach (GeneLocus GL in Chrom.GeneLocusList)
@@ -314,6 +378,7 @@ namespace DrivesZPG
         {
             bool oneisthere = false;
             bool twoisthere = false;
+
             foreach (Chromosome Chrom in this.ChromosomeListA)
             {
                 foreach (GeneLocus GL in Chrom.GeneLocusList)
@@ -444,12 +509,7 @@ namespace DrivesZPG
                 {
                     if (GL.AlleleName == "Drive")
                         {
-                            //foreach (var (name, value) in GL.Traits)
-                            //{
-                            //   if (name == "Cas9level")
-                            //        Cas9level += value;
-                            //}
-
+                     
                             int templevel = 0;
                             GL.Traits.TryGetValue("Cas9level", out templevel);
                             Cas9level = Cas9level + templevel;
@@ -472,14 +532,13 @@ namespace DrivesZPG
                 }
             }
 
-
             if (Cas9level > 100)
                 return 100;
             else
                 return Cas9level;
-            #endregion
+            
         }
-
+        #endregion
     }
 
 }
